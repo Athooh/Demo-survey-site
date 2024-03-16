@@ -19,7 +19,7 @@ type studentSurvey struct {
 	Age             string
 	Role            string
 	FavoriteFeature string
-	Recommendation  string
+	Recommendation  []string
 	Comments        string
 }
 
@@ -28,8 +28,6 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 		return
 	}
-	ideas := r.Form["improvements"]
-	recommendation := strings.Join(ideas, ", ")
 
 	student := studentSurvey{
 		Name:            r.FormValue("name"),
@@ -37,14 +35,14 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 		Age:             r.FormValue("age"),
 		Role:            r.FormValue("current-role"),
 		FavoriteFeature: r.FormValue("radio-buttons"),
-		Recommendation:  recommendation,
+		Recommendation:  []string{strings.Join(r.Form["improvements"], ", ")},
 		Comments:        r.FormValue("comment"),
 	}
 	if r.FormValue("submit") == "Submit" {
 		tmpl.Execute(w, struct {
 			Success bool
 			Message string
-		}{Success: true, Message: "Survey Complete"})
+		}{Success: true, Message: "Congratulations!!! Survey Complete"})
 	}
 	fmt.Println(student)
 }

@@ -33,6 +33,9 @@
         <h1>Take A Survey</h1>
         <h4>Thank you for taking the time to help us improve the platform</h4>
         <form action="/form" method="POST">
+            {{ if .Success }}
+            <div class="msg">{{.Message}}</div>
+            {{end}}
             <label for="name">Name</label><br>
             <input type="text" name="name" placeholder="Enter your full names" required><br><br>
 
@@ -86,9 +89,7 @@
                     <input type="submit" name="submit" value="Submit">
                 </div>
             </fieldset>
-            {{ if .Success }}
-            <div class="msg">{{.Message}}</div>
-            {{end}}
+            
         </form>
     </div>
     <footer>
