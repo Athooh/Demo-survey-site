@@ -10,33 +10,16 @@
 </head>
 <body>
     <div class="overlay"></div>
-    <header>
-        <nav>
-            <div class="navigation">
-                <div class="logo"><img src="/assets/img/logo-removebg.png" alt="logo"></div>
-                <div class="nav_menu">
-                    <ul>
-                        <li><a href="index.htmm">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="/form">Survey</a></li>
-                        <li><a href="contact.html">Reach Us</a></li>
-                    </ul>
-                </div>
-                <div class="user">
-                    <p>Welcome <em>User</em>   <i class="fa-solid fa-user"></i></p>
-                </div>
-            </div>
-        </nav>
-    </header>
+    {{template "header"}}
 
     <div class="form-container">
         <h1>Take A Survey</h1>
         <h4>Thank you for taking the time to help us improve the platform</h4>
-        <form action="/form" method="POST">
-            {{ if .Success }}
-            <div class="msg">{{.Message}}</div>
-            {{end}}
-            <label for="name">Name</label><br>
+        {{ if .Success }}
+        <div class="msg">{{.Message}}</div>
+        {{end}}
+        <form action="/survey" method="POST">
+            <label for="name">Full Names</label>
             <input type="text" name="name" placeholder="Enter your full names" required><br><br>
 
             <label for="email">Email</label><br>
@@ -92,23 +75,7 @@
             
         </form>
     </div>
-    <footer>
-        <div class="footer-bunner">
-            <ul class="faqs">
-                <li><a href="">FAQS</a></li>
-                <li><a href="">Calendar 2024</a></li>
-            </ul>
-            <p>&copy2024 The Academy</p>
-            <div class="subscribe-form">
-                <h6>Subscribe for Newsletter</h6>
-                <form action="/subscribe" method="post">
-                    <!--<label for="email"></label>-->
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                    <button type="submit" value="Subscribe">Subscribe</button>
-                </form>
-            </div>
-        </div>
-    </footer>
+    {{template "footer"}}
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script> 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

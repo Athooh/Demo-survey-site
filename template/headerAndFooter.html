@@ -1,0 +1,39 @@
+{{define "header"}}
+<header>
+    <nav>
+        <div class="navigation">
+            <div class="logo"><img src="/assets/img/logo-removebg.png" alt="logo"></div>
+            <div class="nav_menu">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="/survey">Survey</a></li>
+                    <li><a href="/contact">Reach Us</a></li>
+                </ul>
+            </div>
+            <div class="user">
+                <p>Welcome <em>User</em>   <i class="fa-solid fa-user"></i></p>
+            </div>
+        </div>
+    </nav>
+</header>
+{{end}}
+{{define "footer"}}
+<footer>
+    <div class="footer-bunner">
+        <ul class="faqs">
+            <li><a href="">FAQS</a></li>
+            <li><a href="">Calendar 2024</a></li>
+        </ul>
+        <p>&copy2024 The Academy</p>
+        <div class="subscribe-form">
+            <h6>Subscribe for Newsletter</h6>
+            <form method="POST" action="">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <input type="submit" value="Subscribe">
+            </form>
+        </div>
+    </div>
+</footer>
+{{end}}
+

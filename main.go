@@ -16,18 +16,6 @@ var tmpl *template.Template
 
 var db *sql.DB
 
-func getMySQLDB() *sql.DB {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/demosurveysitedb?parseTime=true")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return db
-}
-
-func init() {
-	tmpl = template.Must(template.ParseFiles("./template/form.html"))
-}
-
 type studentSurvey struct {
 	Name            string
 	Email           string
@@ -38,13 +26,69 @@ type studentSurvey struct {
 	Comments        string
 }
 
+type studentNewsletter struct {
+	Email string
+}
+
+type contactUs struct {
+	Name    string
+	Email   string
+	Subject string
+	Message string
+}
+
+func getMySQLDB() *sql.DB {
+	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/demosurveysitedb?parseTime=true")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
+}
+
+func init() {
+	tmpl = template.Must(template.ParseGlob("./template/*.html"))
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl.ExecuteTemplate(w, "home.html", nil)
+	return
+}
+
+func contactHandler(w http.ResponseWriter, r *http.Request) {
+	db = getMySQLDB()
+	if r.Method != http.MethodPost {
+		tmpl.ExecuteTemplate(w, "contact.html", nil)
+		return
+	}
+	userMessage := contactUs{
+		Name:    r.FormValue("name"),
+		Email:   r.FormValue("email"),
+		Subject: r.FormValue("subject"),
+		Message: r.FormValue("message"),
+	}
+	if r.FormValue("submit") == "Send" {
+		_, err := db.Exec("INSERT INTO messages (name, email, subject, message) VALUES(?, ?, ?, ?)", userMessage.Name, userMessage.Email, userMessage.Subject, userMessage.Message)
+		if err != nil {
+			tmpl.Execute(w, struct {
+				Success bool
+				Message string
+			}{Success: true, Message: err.Error()})
+		} else {
+			tmpl.Execute(w, struct {
+				Success bool
+				Message string
+			}{Success: true, Message: "Message Sent Succesfully"})
+		}
+	}
+
+}
+
 func formHandler(w http.ResponseWriter, r *http.Request) {
 	db = getMySQLDB()
 	if r.Method != http.MethodPost {
-		tmpl.Execute(w, nil)
+		tmpl.ExecuteTemplate(w, "form.html", nil)
 		return
 	}
-
 	student := studentSurvey{
 		Name:            r.FormValue("name"),
 		Email:           r.FormValue("email"),
@@ -68,19 +112,44 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 				Success bool
 				Message string
 			}{Success: true, Message: err.Error()})
+			return
 		} else {
 			tmpl.Execute(w, struct {
 				Success bool
 				Message string
 			}{Success: true, Message: "Congratulations!!! Survey Complete"})
+			return
 		}
 	}
 	fmt.Println(student)
 }
 
+func subscribeHandler(w http.ResponseWriter, r *http.Request) {
+	db := getMySQLDB()
+	if r.Method == http.MethodPost {
+		newsletter := studentNewsletter{
+			Email: r.FormValue("email"),
+		}
+		_, err := db.Exec("insert into newsletter (email) values(?)", newsletter.Email)
+		if err != nil {
+			tmpl.Execute(w, struct {
+				Success bool
+				Message string
+			}{Success: true, Message: "Failed to subscribe: " + err.Error()})
+		}
+		tmpl.Execute(w, struct {
+			Success bool
+			Message string
+		}{Success: true, Message: "You have Subscribed for our routine Newsletters"})
+	}
+}
+
 func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
-	http.HandleFunc("/", formHandler)
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/survey", formHandler)
+	http.HandleFunc("/contact", contactHandler)
+	http.HandleFunc("/subscribe", subscribeHandler)
 	http.ListenAndServe(":8080", nil)
 }

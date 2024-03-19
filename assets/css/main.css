@@ -18,6 +18,10 @@ body {
     background-color: rgba(0, 0, 255, 0.5); /* Blueish hue with 50% opacity */
 }
 
+header, footer {
+    position: relative;
+}
+
 .navigation {
     display: flex;
     justify-content: space-between;
@@ -219,4 +223,61 @@ background-color:transparent;
 }
 .subscribe-form button:hover {
     background-color:cornflowerblue;
+}
+/* CONTACT US */
+
+.contact_container {
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+}
+.contact_container h1,
+.contact_container h4 {
+    margin: 10px 150px;
+    text-align: center;
+    color: #fff;
+    font-weight: 300;
+}
+.contact_container h4 {
+    padding-top: 0;
+    font-weight: 200;
+}
+
+.contact_container .address .form_container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgba(0, 0, 82, 0.61);
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.contact-form, .map {
+    width: 100%
+}
+.map iframe {
+    width: 80%;
+    height: 420px;
+    margin: 0 auto;
+}
+
+.socials {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px 70px;
+}
+.social_box {
+    color: #fff;
+    width: 30%;
+    text-align: center;
+
+}
+.social_box .icon {
+    text-align: center;
+}
+.social_box .fa-location-dot, .fa-phone-volume, .fa-paper-plane, .fa-youtube {
+    font-size: 30px;
+    text-align: center;
 }
